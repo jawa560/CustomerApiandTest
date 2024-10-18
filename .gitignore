@@ -1,0 +1,76 @@
+# Binaries
+[Bb]in/
+[Oo]bj/
+
+# Packages
+packages/
+
+# NuGet
+*.nupkg
+*.nuget
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vspscc
+*.vssscc
+*.ncb
+*.aps
+*.pdb
+*.mdb
+*.idb
+*.sbr
+*.resx
+*.log
+*.cache
+*.tmp
+*.tmp_proj
+*.ipch
+*.vs
+*.bak
+*.cache
+*.ilk
+*.pch
+*.sdf
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+*.VC.db.opendb
+*.VC.VC.db
+*.VC.VC.db.opendb
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# NCrunch
+*.ncrunch*
+*.crunch*.local.xml
+
+# Visual Studio Code
+.vscode/
+
+# Miscellaneous
+*.DS_Store
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+*.sublime-settings
+*.sublime-menu
+*.sublime-keymap
+*.sublime-snippet
+*.sublime-macro
+*.sublime-theme
+*.sublime-build
+*.sublime-commands
+*.sublime-completions
