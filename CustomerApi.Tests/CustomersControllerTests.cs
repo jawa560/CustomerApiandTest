@@ -1,5 +1,6 @@
 ﻿using CustomerApi.Controllers;
 using CustomerApi.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -25,8 +26,10 @@ namespace CustomerApi.Tests
             var client = _factory.CreateClient();
             var response = await client.PostAsJsonAsync("/api/auth/login", new { Username = username, Password = password });
             response.EnsureSuccessStatusCode();
-            var tokenResponse = await response.Content.ReadFromJsonAsync<dynamic>();
-            return tokenResponse.token;
+
+            // 使用強類型來解析 JSON 響應
+            var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            return tokenResponse.Token;
         }
 
         [Fact]
@@ -40,12 +43,15 @@ namespace CustomerApi.Tests
                     // Mock the data
                     var mockCustomers = new List<Customer>
                     {
-                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateTime(1990, 1, 1) },
-                        new Customer { Id = 2, Name = "Jane Smith", Address = "456 Elm St", Phone = "555-5678", Birthday = new System.DateTime(1985, 2, 2) }
+                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateOnly(1990, 1, 1) },
+                        new Customer { Id = 2, Name = "Jane Smith", Address = "456 Elm St", Phone = "555-5678", Birthday = new System.DateOnly(1985, 2, 2) }
                     };
-                    services.AddSingleton(mockCustomers);
+                    services.AddScoped(_ => mockCustomers);
                 });
             }).CreateClient();
+
+            var token = await GetJwtToken("user", "password");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             // Act
             var response = await client.GetAsync("/api/customers");
@@ -66,7 +72,7 @@ namespace CustomerApi.Tests
                 {
                     // Mock the data
                     var mockCustomers = new List<Customer>();
-                    services.AddSingleton(mockCustomers);
+                    services.AddScoped(_ => mockCustomers);
                 });
             }).CreateClient();
 
@@ -79,7 +85,7 @@ namespace CustomerApi.Tests
                 Name = "New Customer",
                 Address = "789 Oak St",
                 Phone = "555-9876",
-                Birthday = new System.DateTime(1995, 3, 3)
+                Birthday = new System.DateOnly(1995, 3, 3)
             };
 
             // Act
@@ -106,9 +112,9 @@ namespace CustomerApi.Tests
                     // Mock the data
                     var mockCustomers = new List<Customer>
                     {
-                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateTime(1990, 1, 1) }
+                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateOnly(1990, 1, 1) }
                     };
-                    services.AddSingleton(mockCustomers);
+                    services.AddScoped(_ => mockCustomers);
                 });
             }).CreateClient();
 
@@ -121,7 +127,7 @@ namespace CustomerApi.Tests
                 Name = "Updated Name",
                 Address = "Updated Address",
                 Phone = "Updated Phone",
-                Birthday = new System.DateTime(1990, 1, 1)
+                Birthday = new System.DateOnly(1990, 1, 1)
             };
 
             // Act
@@ -147,9 +153,9 @@ namespace CustomerApi.Tests
                     // Mock the data
                     var mockCustomers = new List<Customer>
                     {
-                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateTime(1990, 1, 1) }
+                        new Customer { Id = 1, Name = "John Doe", Address = "123 Main St", Phone = "555-1234", Birthday = new System.DateOnly(1990, 1, 1) }
                     };
-                    services.AddSingleton(mockCustomers);
+                    services.AddScoped(_ => mockCustomers);
                 });
             }).CreateClient();
 
@@ -165,4 +171,11 @@ namespace CustomerApi.Tests
             Assert.Empty(customers);
         }
     }
+
+    // 定義 TokenResponse 類別
+    public class TokenResponse
+    {
+        public string Token { get; set; }
+    }
 }
+

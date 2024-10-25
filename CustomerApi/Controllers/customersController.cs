@@ -6,8 +6,9 @@ using CustomerApi.Models;
 
 namespace CustomerApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    
     public class CustomersController : ControllerBase
     {
         private static List<Customer> customers = new List<Customer>();
@@ -61,6 +62,7 @@ namespace CustomerApi.Controllers
         /// <response code="201">新客戶添加成功.</response>
         /// <response code="400">無效的輸入值.</response>
         /// <response code="401">沒有權限可開啟本頁.</response>
+        /// <response code="404">建立資料失敗.</response>
         [HttpPost]
         [Authorize(Roles = "User,Admin")]
         [ProducesResponseType(typeof(Customer), 201)]
@@ -69,7 +71,7 @@ namespace CustomerApi.Controllers
         public ActionResult<Customer> Post([FromBody] Customer customer)
         {
             customers.Add(customer);
-            customer.Id = customers.Count + 1;
+            //customer.Id = customers.Count; 
             return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
         }
 
@@ -98,11 +100,8 @@ namespace CustomerApi.Controllers
             }
             existingCustomer.Name = customer.Name;
             existingCustomer.Birthday = customer.Birthday;
-            existingCustomer.Gender = customer.Gender;
             existingCustomer.Address = customer.Address;
             existingCustomer.Phone = customer.Phone;
-            existingCustomer.Note1 = customer.Note1;
-            existingCustomer.Note2 = customer.Note2;
 
             return NoContent();
         }

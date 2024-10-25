@@ -16,11 +16,8 @@ public class ExampleFilters : ISchemaFilter, IOperationFilter
                 ["id"] = new OpenApiInteger(1),
                 ["name"] = new OpenApiString("王曉明"),
                 ["birthday"] = new OpenApiString("1990-01-01"),
-                ["gender"] = new OpenApiString("男"),
                 ["address"] = new OpenApiString("台南市永華路一段1號"),
                 ["phone"] = new OpenApiString("123-456-7890"),
-                ["note1"] = new OpenApiString("註解 1"),
-                ["note2"] = new OpenApiString("註解 2")
             };
         }
     }
@@ -35,13 +32,11 @@ public class ExampleFilters : ISchemaFilter, IOperationFilter
                 {
                     Value = new OpenApiObject
                     {
+                        ["id"] = new OpenApiInteger(1),
                         ["name"] = new OpenApiString("王曉明"),
                         ["birthday"] = new OpenApiString("1990-01-01"),
-                        ["gender"] = new OpenApiString("男"),
                         ["address"] = new OpenApiString("台南市永華路一段1號"),
                         ["phone"] = new OpenApiString("098-765-4321"),
-                        ["note1"] = new OpenApiString("註解 1"),
-                        ["note2"] = new OpenApiString("註解 2")
                     }
                 }
             };
