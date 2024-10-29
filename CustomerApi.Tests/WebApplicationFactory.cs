@@ -8,10 +8,13 @@ using System.Text;
 
 namespace CustomerApi.Tests
 {
+  
     public class CustomWebApplicationFactory<Program> : WebApplicationFactory<Program> where Program : class
     {
+      
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            //builder.UseUrls("https://localhost:7088", "http://localhost:5260");
             builder.ConfigureServices(services =>
             {
                 // 配置 JWT 認證

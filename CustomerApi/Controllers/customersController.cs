@@ -11,8 +11,13 @@ namespace CustomerApi.Controllers
     
     public class CustomersController : ControllerBase
     {
-        private static List<Customer> customers = new List<Customer>();
+        //private static List<Customer> customers = new List<Customer>();
+        private readonly List<Customer> _customers;
 
+        public CustomersController(List<Customer> customers)
+        {
+            _customers = customers;
+        }
         /// <summary>
         /// 查詢所有客戶資料:
         /// </summary>
@@ -28,7 +33,7 @@ namespace CustomerApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<Customer>> Get()
         {
-            return customers;
+            return _customers;
         }
 
         /// <summary>
@@ -46,7 +51,7 @@ namespace CustomerApi.Controllers
         [ProducesResponseType(404)]
         public ActionResult<Customer> Get(int id)
         {
-            var customer = customers.FirstOrDefault(c => c.Id == id);
+            var customer = _customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
@@ -70,7 +75,7 @@ namespace CustomerApi.Controllers
         [ProducesResponseType(401)]
         public ActionResult<Customer> Post([FromBody] Customer customer)
         {
-            customers.Add(customer);
+            _customers.Add(customer);
             //customer.Id = customers.Count; 
             return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
         }
@@ -93,7 +98,7 @@ namespace CustomerApi.Controllers
         [ProducesResponseType(404)]
         public IActionResult Put(int id, [FromBody] Customer customer)
         {
-            var existingCustomer = customers.FirstOrDefault(c => c.Id == id);
+            var existingCustomer = _customers.FirstOrDefault(c => c.Id == id);
             if (existingCustomer == null)
             {
                 return NotFound();
@@ -121,12 +126,12 @@ namespace CustomerApi.Controllers
         [ProducesResponseType(404)]
         public IActionResult Delete(int id)
         {
-            var customer = customers.FirstOrDefault(c => c.Id == id);
+            var customer = _customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-            customers.Remove(customer);
+            _customers.Remove(customer);
             return NoContent();
         }
     }

@@ -1,14 +1,9 @@
-﻿using CustomerApi.Controllers;
-using CustomerApi.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using CustomerApi.Models;
+
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System.Collections.Generic;
-using System.Net.Http;
+
+using System.Diagnostics;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace CustomerApi.Tests
 {
@@ -47,8 +42,21 @@ namespace CustomerApi.Tests
                         new Customer { Id = 2, Name = "Jane Smith", Address = "456 Elm St", Phone = "555-5678", Birthday = new System.DateOnly(1985, 2, 2) }
                     };
                     services.AddScoped(_ => mockCustomers);
+
+                    if (mockCustomers != null)
+                    {
+                        foreach (var customer in mockCustomers)
+                        {
+                            Debug.WriteLine($"Id: {customer.Id}, Name: {customer.Name}, Address: {customer.Address}, Phone: {customer.Phone}, Birthday: {customer.Birthday}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("mockCustomers list is null");
+                    }
                 });
             }).CreateClient();
+           
 
             var token = await GetJwtToken("user", "password");
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -59,6 +67,19 @@ namespace CustomerApi.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var customers = await response.Content.ReadFromJsonAsync<List<Customer>>();
+
+            // Print the customers list
+            if (customers != null)
+            {
+                foreach (var customer in customers)
+                {
+                    Debug.WriteLine($"Id: {customer.Id}, Name: {customer.Name}, Address: {customer.Address}, Phone: {customer.Phone}, Birthday: {customer.Birthday}");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Customers list is null");
+            }
             Assert.Equal(2, customers.Count);
         }
 

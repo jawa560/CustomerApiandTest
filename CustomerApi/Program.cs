@@ -31,17 +31,17 @@ public class Program
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
                 }
-            },
-            Array.Empty<string>()
-        }
             });
             // Include XML comments
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -90,7 +90,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-        app.UseRouting();
+        //app.UseRouting();
 
         app.UseAuthentication();
         app.UseAuthorization();

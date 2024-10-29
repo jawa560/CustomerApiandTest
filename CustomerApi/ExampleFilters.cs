@@ -54,10 +54,10 @@ public class ExampleFilters : ISchemaFilter, IOperationFilter
         {
             operation.Responses["404"].Content.Clear();
         };
-        //if (operation.Responses.ContainsKey("201") && operation.Responses["201"].Content != null)
-        //{
-        //    operation.Responses["201"].Content.Clear();
-        //}
+        if (operation.Responses.ContainsKey("201") && operation.Responses["201"].Content != null)
+        {
+            operation.Responses["201"].Content.Clear();
+        }
 
     }
 }
